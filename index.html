@@ -1,0 +1,158 @@
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>4. Sınıf Quiz Oyunu - 117 Soru</title>
+<style>
+  body { font-family: Arial, sans-serif; background:#f0f8ff; padding:20px; }
+  #container { max-width: 700px; margin: auto; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px #aaa; }
+  h1 { text-align:center; color: #333; }
+  .question { margin-bottom: 20px; }
+  .answers label { display: block; margin: 5px 0; cursor: pointer; }
+  button { background: #4CAF50; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; font-size: 16px; }
+  button:hover { background: #45a049; }
+  #score { font-weight: bold; font-size: 18px; margin-top: 20px; }
+</style>
+</head>
+<body>
+<div id="container">
+  <h1>4. Sınıf Quiz Oyunu</h1>
+  <div id="quiz"></div>
+  <button id="nextBtn">Sonraki Soru</button>
+  <div id="score"></div>
+</div>
+
+<script>
+const questions = [
+  // Sosyal (13 soru)
+  { question: "Türkiye'nin başkenti neresidir?", answers: { a: "İzmir", b: "Ankara", c: "İstanbul", d: "Bursa" }, correct: "b" },
+  { question: "Atatürk'ün doğum yılı nedir?", answers: { a: "1881", b: "1900", c: "1923", d: "1875" }, correct: "a" },
+  { question: "Türkiye'nin en uzun nehri hangisidir?", answers: { a: "Fırat", b: "Dicle", c: "Kızılırmak", d: "Yeşilırmak" }, correct: "c" },
+  { question: "Cumhuriyet hangi yılda ilan edildi?", answers: { a: "1920", b: "1923", c: "1919", d: "1930" }, correct: "b" },
+  { question: "Türkiye'nin en büyük gölü hangisidir?", answers: { a: "Tuz Gölü", b: "Beyşehir Gölü", c: "Van Gölü", d: "Manyas Gölü" }, correct: "c" },
+  { question: "Atatürk'ün en önemli eseri nedir?", answers: { a: "Nutuk", b: "İnkılap Tarihi", c: "Söylev", d: "Hatıralar" }, correct: "a" },
+  { question: "Türkiye kaç coğrafi bölgeye ayrılmıştır?", answers: { a: "7", b: "6", c: "8", d: "9" }, correct: "a" },
+  { question: "İstiklal Marşı'nın yazarı kimdir?", answers: { a: "Mehmet Akif Ersoy", b: "Nazım Hikmet", c: "Orhan Veli", d: "Ahmet Haşim" }, correct: "a" },
+  { question: "Türkiye'nin resmi dili nedir?", answers: { a: "Türkçe", b: "Arapça", c: "İngilizce", d: "Almanca" }, correct: "a" },
+  { question: "Meclis binası hangi şehirde bulunur?", answers: { a: "İstanbul", b: "Ankara", c: "İzmir", d: "Bursa" }, correct: "b" },
+  { question: "Türkiye'nin en yüksek dağı hangisidir?", answers: { a: "Kaçkar", b: "Erciyes", c: "Ağrı", d: "Uludağ" }, correct: "c" },
+  { question: "Türkiye'nin para birimi nedir?", answers: { a: "Euro", b: "Dolar", c: "Lira", d: "Sterlin" }, correct: "c" },
+  { question: "Türkiye'nin en uzun karayolu köprüsü hangisidir?", answers: { a: "15 Temmuz Şehitler Köprüsü", b: "Yavuz Sultan Selim Köprüsü", c: "Boğaziçi Köprüsü", d: "Çanakkale Köprüsü" }, correct: "d" },
+
+  // Matematik (25 soru)
+  { question: "8 x 7 kaçtır?", answers: { a: "56", b: "54", c: "49", d: "63" }, correct: "a" },
+  { question: "45 ÷ 9 kaçtır?", answers: { a: "5", b: "4", c: "6", d: "9" }, correct: "a" },
+  { question: "27 + 18 kaçtır?", answers: { a: "44", b: "45", c: "46", d: "43" }, correct: "b" },
+  { question: "60 - 27 kaçtır?", answers: { a: "33", b: "34", c: "32", d: "31" }, correct: "a" },
+  { question: "9 x 5 kaçtır?", answers: { a: "45", b: "40", c: "35", d: "50" }, correct: "a" },
+  { question: "72 ÷ 8 kaçtır?", answers: { a: "9", b: "8", c: "10", d: "11" }, correct: "a" },
+  { question: "25 + 37 kaçtır?", answers: { a: "62", b: "61", c: "63", d: "64" }, correct: "a" },
+  { question: "50 - 19 kaçtır?", answers: { a: "29", b: "30", c: "31", d: "28" }, correct: "a" },
+  { question: "12 x 4 kaçtır?", answers: { a: "48", b: "44", c: "52", d: "40" }, correct: "a" },
+  { question: "81 ÷ 9 kaçtır?", answers: { a: "9", b: "8", c: "10", d: "7" }, correct: "a" },
+  { question: "34 + 28 kaçtır?", answers: { a: "62", b: "61", c: "63", d: "64" }, correct: "a" },
+  { question: "90 - 45 kaçtır?", answers: { a: "45", b: "44", c: "46", d: "43" }, correct: "a" },
+  { question: "7 x 8 kaçtır?", answers: { a: "56", b: "54", c: "49", d: "63" }, correct: "a" },
+  { question: "56 ÷ 7 kaçtır?", answers: { a: "8", b: "7", c: "9", d: "10" }, correct: "a" },
+  { question: "14 + 29 kaçtır?", answers: { a: "43", b: "42", c: "44", d: "45" }, correct: "a" },
+  { question: "100 - 55 kaçtır?", answers: { a: "45", b: "44", c: "46", d: "43" }, correct: "a" },
+  { question: "11 x 6 kaçtır?", answers: { a: "66", b: "65", c: "67", d: "68" }, correct: "a" },
+  { question: "63 ÷ 9 kaçtır?", answers: { a: "7", b: "6", c: "8", d: "9" }, correct: "a" },
+  { question: "17 + 36 kaçtır?", answers: { a: "53", b: "52", c: "54", d: "55" }, correct: "a" },
+  { question: "85 - 40 kaçtır?", answers: { a: "45", b: "44", c: "46", d: "43" }, correct: "a" },
+  { question: "8 x 9 kaçtır?", answers: { a: "72", b: "71", c: "73", d: "74" }, correct: "a" },
+  { question: "90 ÷ 10 kaçtır?", answers: { a: "9", b: "8", c: "10", d: "11" }, correct: "a" },
+  { question: "24 + 19 kaçtır?", answers: { a: "43", b: "42", c: "44", d: "45" }, correct: "a" },
+  { question: "70 - 35 kaçtır?", answers: { a: "35", b: "34", c: "36", d: "33" }, correct: "a" },
+  { question: "5 x 11 kaçtır?", answers: { a: "55", b: "50", c: "60", d: "65" }, correct: "a" },
+
+  // Fen Bilimleri (25 soru)
+  { question: "Su kaç derecede donar?", answers: { a: "0°C", b: "100°C", c: "10°C", d: "50°C" }, correct: "a" },
+  { question: "Dünya hangi gezegendir?", answers: { a: "3", b: "4", c: "2", d: "1" }, correct: "a" },
+  { question: "Bitkiler ne ile beslenir?", answers: { a: "Güneş ışığı", b: "Toprak", c: "Su", d: "Hava" }, correct: "a" },
+  { question: "Güneş enerjisi hangi tür enerjidir?", answers: { a: "Yenilenebilir", b: "Fosil", c: "Nükleer", d: "Elektrik" }, correct: "a" },
+  { question: "Hayvanlar nerede yaşar?", answers: { a: "Orman", b: "Deniz", c: "Hava", d: "Toprak" }, correct: "a" },
+  { question: "Elektrik akımı nedir?", answers: { a: "Elektronların hareketi", b: "Atom", c: "Işık", d: "Ses" }, correct: "a" },
+  { question: "Hangi organımız nefes almamızı sağlar?", answers: { a: "Akciğer", b: "Kalp", c: "Beyin", d: "Mide" }, correct: "a" },
+  { question: "Su buharı hangi hale dönüşür?", answers: { a: "Sıvı", b: "Katı", c: "Gaz", d: "Toz" }, correct: "a" },
+  { question: "Bitkilerde fotosentez hangi organelde olur?", answers: { a: "Kloroplast", b: "Mitokondri", c: "Çekirdek", d: "Lizozom" }, correct: "a" },
+  { question: "Ses hangi ortamda yayılır?", answers: { a: "Hava", b: "Boşluk", c: "Vakum", d: "Uzay" }, correct: "a" },
+  { question: "Işık hangi hızda hareket eder?", answers: { a: "299,792 km/s", b: "150,000 km/s", c: "1,000 km/s", d: "300,000 km/s" }, correct: "a" },
+  { question: "İnsan vücudundaki en büyük organ hangisidir?", answers: { a: "Deri", b: "Beyin", c: "Kalp", d: "Karaciğer" }, correct: "a" },
+  { question: "Bitkiler hangi gazı salar?", answers: { a: "Oksijen", b: "Karbondioksit", c: "Azot", d: "Helyum" }, correct: "a" },
+  { question: "Dünya kendi etrafında kaç saatte döner?", answers: { a: "24", b: "12", c: "48", d: "36" }, correct: "a" },
+  { question: "Hangi element sudan oluşur?", answers: { a: "Hidrojen ve Oksijen", b: "Karbon ve Oksijen", c: "Azot ve Oksijen", d: "Helyum ve Karbon" }, correct: "a" },
+  { question: "Güneş sisteminin en büyük gezegeni hangisidir?", answers: { a: "Jüpiter", b: "Satürn", c: "Dünya", d: "Mars" }, correct: "a" },
+  { question: "Canlıların temel yapı taşı nedir?", answers: { a: "Hücre", b: "Organ", c: "Doku", d: "Sistem" }, correct: "a" },
+  { question: "Ay, Dünya'nın doğal uydusu mudur?", answers: { a: "Evet", b: "Hayır", c: "Bazen", d: "Bilinemiyor" }, correct: "a" },
+  { question: "Bitkiler neden fotosentez yapar?", answers: { a: "Besin üretmek için", b: "Nefes almak için", c: "Su içmek için", d: "Büyümek için" }, correct: "a" },
+  { question: "Hangi sıvı insan vücudunda en fazla bulunur?", answers: { a: "Su", b: "Kan", c: "Mide suyu", d: "Ter" }, correct: "a" },
+  { question: "Yıldızlar ne tür cisimlerdir?", answers: { a: "Ateş küreleri", b: "Taşlar", c: "Gazlar", d: "Sıvılar" }, correct: "a" },
+  { question: "Yağmur nasıl oluşur?", answers: { a: "Bulutlardaki su damlacıkları birleşerek", b: "Rüzgarla", c: "Güneşle", d: "Karlarla" }, correct: "a" },
+  { question: "Kışın ağaçlar neden yapraksız kalır?", answers: { a: "Soğuktan korunmak için", b: "Yaz için", c: "Yağmur için", d: "Rüzgar için" }, correct: "a" },
+  { question: "Dünyanın en büyük okyanusu hangisidir?", answers: { a: "Pasifik Okyanusu", b: "Atlantik", c: "Hint", d: "Arktik" }, correct: "a" },
+  { question: "Kutup ayıları nerede yaşar?", answers: { a: "Kuzey Kutbu", b: "Güney Kutbu", c: "Ormanlar", d: "Çöller" }, correct: "a" },
+
+  // Türkçe (29 soru)
+  { question: "Aşağıdaki cümlelerden hangisi olumludur?", answers: { a: "Bugün hava çok güzel.", b: "Yarın yağmur yağmayacak mı?", c: "Okula gitmek istemiyorum.", d: "Ders çalışmadım." }, correct: "a" },
+  { question: "‘Kalem’ kelimesinin eş anlamlısı nedir?", answers: { a: "Yazı aracı", b: "Defter", c: "Silgi", d: "Kitap" }, correct: "a" },
+  { question: "Aşağıdaki cümlelerden hangisi soru cümlesidir?", answers: { a: "Sen nereye gidiyorsun?", b: "Ben kitap okuyorum.", c: "O çok güzel.", d: "Bugün okul tatil." }, correct: "a" },
+  { question: "‘Mutlu’ kelimesinin zıt anlamlısı nedir?", answers: { a: "Üzgün", b: "Sevinçli", c: "Neşeli", d: "Huzurlu" }, correct: "a" },
+  { question: "Aşağıdaki kelimelerden hangisi çoğul eki almıştır?", answers: { a: "Kitaplar", b: "Kalem", c: "Masa", d: "Defter" }, correct: "a" },
+  { question: "‘Ev’ kelimesinin çoğul hali nedir?", answers: { a: "Evler", b: "Evlar", c: "Evs", d: "Evel" }, correct: "a" },
+  { question: "Aşağıdaki cümlelerden hangisi olumsuz cümledir?", answers: { a: "Ben gitmedim.", b: "O geliyor.", c: "Biz oynuyoruz.", d: "Sen geliyorsun." }, correct: "a" },
+  { question: "‘Güzel’ kelimesi hangi tür kelimedir?", answers: { a: "Sıfat", b: "İsim", c: "Fiil", d: "Zamir" }, correct: "a" },
+  { question: "‘Kitap okuyorum.’ cümlesinde fiil hangisidir?", answers: { a: "Okuyorum", b: "Kitap", c: "Ben", d: "Cümle" }, correct: "a" },
+  { question: "‘Benim adım Ali.’ cümlesinde zamir hangisidir?", answers: { a: "Benim", b: "Adım", c: "Ali", d: "Cümle" }, correct: "a" },
+  { question: "Aşağıdaki cümlelerden hangisi emir cümlesidir?", answers: { a: "Kapıyı kapat!", b: "Kapı kapalı.", c: "Kapıyı açıyor.", d: "Kapı kapandı." }, correct: "a" },
+  { question: "‘Kalem’ kelimesinin çoğul eki nedir?", answers: { a: "ler", b: "lar", c: "lerler", d: "larlar" }, correct: "a" },
+  { question: "Aşağıdaki kelimelerden hangisi isimdir?", answers: { a: "Kitap", b: "Koşmak", c: "Hızlı", d: "Güzel" }, correct: "a" },
+  { question: "‘Ali okula gidiyor.’ cümlesinde özne kimdir?", answers: { a: "Ali", b: "Okula", c: "Gidiyor", d: "Cümle" }, correct: "a" },
+  { question: "‘Mutlu’ kelimesi hangi tür kelimedir?", answers: { a: "Sıfat", b: "Fiil", c: "Zamir", d: "İsim" }, correct: "a" },
+  { question: "Aşağıdaki cümlelerden hangisi olumsuz cümledir?", answers: { a: "Ben gelmedim.", b: "O geldi.", c: "Biz oynuyoruz.", d: "Sen gidiyorsun." }, correct: "a" },
+  { question: "‘Ben kitabı okuyorum.’ cümlesinde nesne hangisidir?", answers: { a: "Kitabı", b: "Ben", c: "Okuyorum", d: "Cümle" }, correct: "a" },
+  { question: "‘Koşmak’ kelimesi hangi tür kelimedir?", answers: { a: "Fiil", b: "İsim", c: "Sıfat", d: "Zamir" }, correct: "a" },
+  { question: "‘Güzel’ kelimesinin zıt anlamı nedir?", answers: { a: "Çirkin", b: "Tatlı", c: "Büyük", d: "Küçük" }, correct: "a" },
+  { question: "‘Kitapları okudum.’ cümlesinde kaç tane çoğul eki vardır?", answers: { a: "1", b: "2", c: "0", d: "3" }, correct: "a" },
+  { question: "‘Okul’ kelimesinin çoğul hali nedir?", answers: { a: "Okullar", b: "Okuls", c: "Okulr", d: "Okuller" }, correct: "a" },
+  { question: "‘Ali ve Ayşe okula gidiyor.’ cümlesinde kaç tane özne vardır?", answers: { a: "2", b: "1", c: "3", d: "0" }, correct: "a" },
+  { question: "‘Hızlı koşuyor.’ cümlesinde zarf hangisidir?", answers: { a: "Hızlı", b: "Koşuyor", c: "Cümle", d: "Yok" }, correct: "a" },
+  { question: "‘Güzel kız güldü.’ cümlesinde kaç tane sıfat vardır?", answers: { a: "1", b: "2", c: "0", d: "3" }, correct: "a" },
+  { question: "‘Kitap okudum.’ cümlesinde fiil hangisidir?", answers: { a: "Okudum", b: "Kitap", c: "Cümle", d: "Yok" }, correct: "a" },
+  { question: "‘Bahçe çok büyük.’ cümlesinde sıfat hangisidir?", answers: { a: "Büyük", b: "Bahçe", c: "Çok", d: "Yok" }, correct: "a" },
+  { question: "‘Evin kapısı kapalı.’ cümlesinde isim hangisidir?", answers: { a: "Ev", b: "Kapı", c: "Kapalı", d: "Yok" }, correct: "a" },
+  { question: "‘Hava çok güzel.’ cümlesinde zarf hangisidir?", answers: { a: "Çok", b: "Hava", c: "Güzel", d: "Yok" }, correct: "a" },
+
+  // İnsan Hakları (10 soru)
+  { question: "Her insanın eşit haklara sahip olması neyi ifade eder?", answers: { a: "Adalet", b: "Özgürlük", c: "Yardımlaşma", d: "Sevgi" }, correct: "a" },
+  { question: "İnsan hakları hangi belgede yazılıdır?", answers: { a: "İnsan Hakları Evrensel Beyannamesi", b: "Anayasa", c: "Kanunlar", d: "Yönetmelik" }, correct: "a" },
+  { question: "Herkesin eğitim hakkı vardır. Bu hangi haktır?", answers: { a: "Eğitim hakkı", b: "Sağlık hakkı", c: "Çalışma hakkı", d: "Barınma hakkı" }, correct: "a" },
+  { question: "İnsan hakları ne zaman ortaya çıkmıştır?", answers: { a: "18. yüzyıl", b: "15. yüzyıl", c: "20. yüzyıl", d: "10. yüzyıl" }, correct: "a" },
+  { question: "Herkesin yaşam hakkı vardır. Bu hangi haktır?", answers: { a: "Yaşam hakkı", b: "Özgürlük hakkı", c: "Sağlık hakkı", d: "Çalışma hakkı" }, correct: "a" },
+  { question: "İnsan hakları neden önemlidir?", answers: { a: "Herkesi korur", b: "Herkesi sınırlar", c: "Yalnızca güçlüleri korur", d: "Yalnızca çocukları korur" }, correct: "a" },
+  { question: "Herkes eşit haklara sahiptir. Bu hangi ilkeyi gösterir?", answers: { a: "Eşitlik", b: "Özgürlük", c: "Adalet", d: "Barış" }, correct: "a" },
+  { question: "Çocukların eğitim hakkı kim tarafından korunur?", answers: { a: "Devlet", b: "Aile", c: "Arkadaşlar", d: "Öğretmen" }, correct: "a" },
+  { question: "İnsan haklarına saygı göstermek ne demektir?", answers: { a: "Herkese saygı duymak", b: "Sadece kendine saygı duymak", c: "Yalnızca aileye saygı duymak", d: "Yalnızca arkadaşlara saygı duymak" }, correct: "a" },
+  { question: "İnsan hakları ihlali nedir?", answers: { a: "Hakların çiğnenmesi", b: "Hakların korunması", c: "Hakların genişlemesi", d: "Hakların kazanılması" }, correct: "a" },
+
+  // Din Kültürü (5 soru)
+  { question: "İslam'ın beş şartından biri nedir?", answers: { a: "Namaz", b: "Oruç tutmamak", c: "Hac yapmamak", d: "Zekat vermemek" }, correct: "a" },
+  { question: "Ramazan ayında oruç tutmak ne zaman yapılır?", answers: { a: "Güneş doğmadan önce", b: "Güneş battıktan sonra", c: "Öğlen vakti", d: "Gece yarısı" }, correct: "a" },
+  { question: "Hz. Muhammed (s.a.v) hangi peygamberdir?", answers: { a: "Son peygamber", b: "İlk peygamber", c: "Ara peygamber", d: "Hiçbirisi" }, correct: "a" },
+  { question: "Cuma günü Müslümanlar nerede toplanır?", answers: { a: "Cami", b: "Okul", c: "Ev", d: "Park" }, correct: "a" },
+  { question: "Zekat vermek ne demektir?", answers: { a: "Maddi yardımda bulunmak", b: "Oruç tutmak", c: "Namaz kılmak", d: "Hac yapmak" }, correct: "a" },
+
+  // İngilizce (10 soru)
+  { question: "What is the English word for ‘kitap’?", answers: { a: "Book", b: "Pen", c: "Table", d: "Chair" }, correct: "a" },
+  { question: "How do you say ‘merhaba’ in English?", answers: { a: "Hello", b: "Goodbye", c: "Thanks", d: "Please" }, correct: "a" },
+  { question: "What color is the sky?", answers: { a: "Blue", b: "Green", c: "Red", d: "Yellow" }, correct: "a" },
+  { question: "How do you say ‘teşekkür ederim’ in English?", answers: { a: "Thank you", b: "Sorry", c: "Please", d: "Welcome" }, correct: "a" },
+  { question: "What is the plural form of ‘cat’?", answers: { a: "Cats", b: "Cat", c: "Cates", d: "Catz" }, correct: "a" },
+  { question: "What is the opposite of ‘hot’?", answers: { a: "Cold", b: "Warm", c: "Cool", d: "Heat" }, correct: "a" },
+  { question: "Which one is a fruit?", answers: { a: "Apple", b: "Carrot", c: "Potato", d: "Tomato" }, correct: "a" },
+  { question: "How do you say ‘ev’ in English?", answers: { a: "House", b: "Home", c: "Building", d: "Room" }, correct: "a" },
+  { question: "What is the English word for ‘su’?", answers: { a: "Water", b: "Juice", c: "Milk", d: "Tea" }, correct: "a" },
+  { question: "What do you say when you meet someone?", answers: { a: "Hello", b: "Goodbye", c: "Thanks", d: "Sorry" }, correct: "a" }
+]
